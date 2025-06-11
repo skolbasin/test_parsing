@@ -1,6 +1,11 @@
+import os
+
 from django.core.management.base import BaseCommand
+from dotenv import load_dotenv
 from parser.services import parse_wildberries
 from parser.models import Product
+
+load_dotenv()
 
 
 class Command(BaseCommand):
@@ -8,10 +13,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         products = parse_wildberries(
-            query="очки",
-            min_price=1000,
-            max_price=5000,
-            color="черный"
+            query=os.getenv("PRODUCT"),
+            min_price=int(os.getenv("MIN_PRICE")),
+            max_price=int(os.getenv("MAX_PRICE")),
+            keyword=os.getenv("KEYWORD")
         )
 
         for product in products:
